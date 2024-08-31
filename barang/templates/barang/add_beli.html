@@ -1,0 +1,220 @@
+{% extends "gate/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block extrahead %}
+<script type="text/javascript">
+$(document).ready(function ($) {
+    $('input.uang').setMask();
+    $('.tabular').submit(function () {
+        $('input.uang').each(function () {
+            $(this).val(to_number($(this).val()));
+        });
+        return true;
+    });
+});
+
+
+
+function showCurrentValue(event)
+{
+    const value = event.target.value;
+    var hasil = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    document.getElementById("label").innerText = hasil;
+
+}
+
+
+function hitung(){
+
+  var bayar = document.getElementById('bayar').value; 
+  var jumlah = {{total_tagihan}};
+  var total = parseInt(bayar) - parseInt(jumlah);
+
+
+  var hasil = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  document.getElementById('kembali').innerHTML = hasil;
+
+
+}
+		
+$(document).ready(function(){
+    $("#boxchecked").click(function (){
+        if ($("#boxchecked").prop("checked")){
+            $("#hidden").hide();
+        }else{
+            $("#hidden").show();
+        }              
+    });
+});
+
+
+</script>
+
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+
+<!--peer buat ambil ke lokal aja -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+<!-- jQuery UI !-->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<script>
+
+
+  $(document).ready(function() {
+      $('input[type="checkbox"]').click(function() {
+          var inputValue = $(this).attr("value");
+          $("." + inputValue).toggle();
+      });
+  });
+
+  $(function() {
+    $("#nama_barang").autocomplete({
+      source: "/bar/autokomplit/",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 1,
+    });
+  });
+
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+
+  $(function() {
+    $("#kode_member").autocomplete({
+      source: "/bar/memberautokomplit/",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 1,
+    });
+  });
+
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+
+</script>
+
+{% endblock %}
+{% load number_format useringroup %}
+</head>
+
+<body>
+{% block content %}
+<div class="row">
+    <div class="box col-md-6">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Cari Barang</h2>
+            </div>
+            <div class="box-content">
+                <form class="form-inline" role="form" method="POST" action=".">{% csrf_token %}
+                <div class="form-group has-success has-feedback input-group col-md-3">
+                  <label class="control-label" for="inputSuccess4">{{form.jumlah.label}}</label>
+                  {{form.jumlah}}
+                </div>   
+
+                <div class="form-group has-success has-feedback input-group col-md-8">
+                  <label class="control-label" for="inputSuccess4">{{form.barang.label}}</label>
+                  {{form.barang}}
+                </div>   
+                <div id="listbarang"></div>
+                <br>
+                <br>
+                    <button type="submit" class="btn btn-default">Tambah Barang</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="box col-md-6">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Rincian Penjualan Barang</h2>
+            </div>
+            <div class="box-content col-md-8">
+			<table style="font-size:25px;">
+                
+             <tr>
+			    <td>Total</td><td>:</td><td align="right" > <p align="right" id ="jumlah"> {{total_tagihan|number_format:0}} </p></td>
+    		  </tr><tr>
+			    <td>Pembayaran</td><td>:</td><td align="right"><p align="right"><span id="label"></span></p></td>
+			  </tr><tr>
+			    <td>Kembalian</td><td>:</td><td align="right" ><p align="right"><span id="kembali"></span></p></td>
+              </tr>
+			</table>
+			</div>
+            
+            <div class="box-content">
+              <p><input type="checkbox" name="colorCheckbox" value="check"> Member</p>
+                <form class="form-inline" role="form" method="POST" action="/bar/bayar/">{% csrf_token %}
+                    
+                <div class="form-group has-success has-feedback input-group col-md-3">
+                  <label class="control-label" for="inputSuccess4">Total Bayar</label>
+                  {{form_bayar.bayar}}
+                </div>   
+                <div style= "display:none"  class="form-group has-success has-feedback input-group col-md-3 check box" >
+                  <label class="control-label" for="inputSuccess4">{{form_member.kode_member.label}}</label>
+                  {{form_member.kode_member}}
+                </div>
+                <br>
+                <div class="col-md-6" style="top:200px left:1050px position:absolute">
+                <button type="submit" name="submit" value="bayar" class="btn btn-default">Bayar</button>
+                <button type="submit" name="submit" value="kasbon" class="btn btn-default check box" style= "display:none">Kasbon</button>
+                  <!--<input type="text" class="form-control uang rp_plafon" alt="integer" onkeyup="hitung()" onInput="showCurrentValue(event)" id="bayar">-->
+                </div>
+			<hr>
+			<table style="font-size:15px;">
+			  <tr>
+			    <td hidden>ID</td>
+                <td>Qty</td>
+                <td>Nama Barang</td>
+                <td>Ukuran</td>
+                <td>Harga Barang</td>
+                <td>Total Harga</td>
+    		  </tr>
+              {% for a in show|dictsortreversed:"id" %}
+               
+              <tr>
+                <td hidden><input type="checkbox"  value="{{ a.id }}" checked name='id_minta' /></td>
+			    <td>{{a.total_item}}</td>
+                <td>{{a.item_barang.nama_barang}}</td>
+                <td>{{a.item_barang.ukuran}}</td>
+                <td><p align="right">{{a.item_barang.harga_jual|number_format:0}}</p></td>
+                <td><p align="right">{{a.total_harga_item|number_format:0}}</p></td>
+			  </tr>
+              {% endfor %}
+			</table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock %} 
+
+    <footer class="row">
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="http://usman.it" target="_blank">Muhammad
+                Usman</a> 2012 - 2015</p>
+
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Powered by: <a
+                href="http://usman.it/free-responsive-admin-template">Charisma</a></p>
+    </footer>
+
+</div><!--/.fluid-container-->
+
+</body>
+</html>
+

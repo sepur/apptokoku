@@ -1,0 +1,76 @@
+{% extends "gate/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block extrahead %}
+
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+
+<!--peer buat ambil ke lokal aja -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+<!-- jQuery UI !-->
+
+{% endblock %}
+{% load number_format useringroup %}
+</head>
+
+<body>
+    
+{% block content %}
+<div class="row">
+    <div class="box col-md-12">
+
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Data Kasbon</h2>
+            </div>
+            <div class="box-content">
+			<table style="font-size:15px;">
+			  <tr>
+			    
+                <td>Nama</td>
+                <td>Barang</td>
+                <td>Harga Barang</td>
+                <td>Total Harga Barang</td>
+                <td>Tanggal Transaksi</td>
+                
+    		  </tr>
+{% for a, b in data.items %}
+              <tr>
+
+                  <td>{{a }}</td>
+                  <td>{{b}} </td>
+                  <td align="right">{{ p.total_harga_item|number_format:0 }}</td>
+                  <td align="right">{{ p.tanggal|date:"d-M-Y"}}</td>
+              </tr>
+{% endfor %}              
+			</table>
+            
+          
+                    <button type="submit" class="btn btn-default">Simpan Stok</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
+
+    <footer class="row">
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="http://usman.it" target="_blank">Muhammad
+                Usman</a> 2012 - 2015</p>
+
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Powered by: <a
+                href="http://usman.it/free-responsive-admin-template">Charisma</a></p>
+    </footer>
+
+</div><!--/.fluid-container-->
+
+</body>
+</html>
+

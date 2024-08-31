@@ -1,0 +1,58 @@
+{% load static %}
+<script type="text/javascript">
+$(document).ready(function ($) {
+    $('input.uang').setMask();
+    $('.tabular').submit(function () {
+        $('input.uang').each(function () {
+            $(this).val(to_number($(this).val()));
+        });
+        return true;
+    });
+});
+
+function addCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return parts.join(".");
+}
+
+function cekangsuran(){
+    var cari_nopin = $('#cari_nopin').val();
+    var dataString = 'cari_nopin='+cari_nopin;
+    $.ajax({
+        url: "/ang/cekang/",
+        data: dataString,        
+        dataType: "JSON",        
+        success: function(data)
+        {
+            if(data.trig=='1'){
+              $('#nilai_angsuran').val(addCommas(data.nilai_angsuran));
+              $('#nama').val(data.nama);
+              $('#nopin').val(data.nopin);
+              $('#angsuran_ke').val(data.angsuran_ke);
+              $('#tagihan_ke').val(data.tagihan_ke);
+              $('#cabang').val(data.cabang);
+              $('#os_pokok').val(addCommas(data.os_pokok));
+              $('#tunggakan').val(addCommas(data.tunggakan));
+            }
+            else{
+              alert('Nopin Tidak Ditemukan')
+              $('#nilai_angsuran').val('');
+              $('#nama').val('');
+              $('#nopin').val('');
+              $('#angsuran_ke').val('');
+              $('#tagihan_ke').val('');
+              $('#cabang').val('');
+              $('#tunggakan').val('');
+              $('#os_pokok').val('');
+              $('#cari_nopin').val('');
+              $('#cari_nopin').focus();
+              return false;
+            }            
+        }
+    });
+}
+
+ </script>
+
+

@@ -1,0 +1,194 @@
+<style type="text/css">
+page {
+  background: white;
+  display: block;
+}
+page[size="A4"] {  
+  width: 58mm;
+  margin-top: 5mm;
+  margin-left: 5mm;
+  margin-right: 5mm;
+  margin-bottom: 5mm;
+}
+
+@media print {
+  body, page {
+    margin: 0;
+    box-shadow: 0;
+  }
+}  
+</style>
+<!DOCTYPE html>
+<script language="javascript">
+function printpage() { window.print(); }
+</script>
+</head>
+<body onload="printpage();">
+
+<html>
+{% load number_format %}
+<body>
+<page size="A4">
+<table width="100%" align="center">
+<tr>
+<td>
+    <p STYLE="font-size:9px" align = "Center">TOKOKU<br>
+    Jl. Cisaranten Kulon IV No 55<br>
+    Telp. 0896 6334 0122</p>
+</td>
+</tr>
+</table>
+
+
+<table width="100%" align="center" STYLE="font-size:9px">
+<tr>
+    <td align="Left">{{skr}}</td>
+    <td align="Right">&nbsp;</td>
+</tr>
+<tr>
+    <td align="Left">Kasir : Firman</td>
+    <td align="Right">Bon : {{oid}}</td>
+</tr>
+
+
+<tr>
+<td><p>===============</p></td>
+<td><p>===============</p></td>
+</tr>
+</table>
+<table width="100%"  STYLE="font-size:9px; align:center">
+<tr>
+    <td align="left">Deskripsi</td>
+    <td align="left">&nbsp;</td>
+    <td align="left">Qty</td>
+    <td align="left">&nbsp;</td>
+    <td align="left">Ukuran</td>
+    <td align="left">&nbsp;</td>
+    <td align="left">Harga</td>
+    <td align="left">&nbsp;</td>
+    <td align="left">Total</td>
+</tr>
+{% for a in ps|dictsortreversed:"id" %}
+<tr>
+  <td align="left">{{a.item_barang.nama_barang}}</td>
+  <td align="left">&nbsp;</td>
+  <td align="left">{{a.total_item}}</td>
+  <td align="left">&nbsp;</td>
+  <td align="left">{{a.item_barang.ukuran}}</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right">{{a.item_barang.harga_barang|number_format:0}}</p></td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right">{{a.total_harga_item|number_format:0}}</p></td>
+</tr>
+{% endfor %}
+</table>
+
+
+<table width="100%" align="center" STYLE="font-size:9px">
+<tr>
+<td><p>===============</p></td>
+<td><p>===============</p></td>
+</tr>
+</table>
+<table width="100%" STYLE="font-size:9px;align:center">
+<tr>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>Sub Total</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right">{{orr.nominal_harus_dibayar|number_format:0}}</p></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>Diskon</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right">0</p></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>Pajak</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right">0</p></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td>Total</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+    <td align="left">&nbsp;</td>
+  <td><p align="right">{{orr.nominal_harus_dibayar|number_format:0}}</p></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>Pembayaran</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right">{{orr.nominal_pembayaran|number_format:0}}</p></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td>Kembalian</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right"></p>&nbsp;</td>
+  <td align="left">&nbsp;</td>
+  <td><p align="right">{{orr.nominal_kembalian|number_format:0}}</p></td>
+</tr>
+</table>
+<table width="100%" align="center" STYLE="font-size:9px">
+<tr>
+<td><p>===============</p></td>
+<td><p>===============</p></td>
+</tr>
+</table>
+
+<table width="100%" align="center">
+<tr>
+<td>
+    <p STYLE="font-size:9px" align = "Center">https://tokoku.com<br>
+    Terimakasih Telah Belanja di Tokoku<br>
+    <i>jazakumullah Khairan Katsiran</i><br>
+    <i>Bisa Deliveri Order, Hubungi:</i><br>
+    Telp. 0896 6334 0122</p>
+</td>
+</tr>
+</table>
+
+</page>
+</body>
+</html>
+
